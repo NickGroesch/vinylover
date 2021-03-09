@@ -1,20 +1,5 @@
 const mongoose = require("mongoose");
 
-// const ThirdPartyProviderSchema = new mongoose.Schema({ // MIGHT not be using this at all
-//     provider_name: {
-//         type: String,
-//         default: null
-//     },
-//     provider_id: {
-//         type: String,
-//         default: null
-//     },
-//     provider_data: {
-//         type: {},
-//         default: null
-//     }
-// });
-
 const UseSchema = new mongoose.Schema({
     name: { type: String },
     email: {
