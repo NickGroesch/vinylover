@@ -18,8 +18,7 @@ passport.use(
         db.User.findOne({ email: email })
             .then(user => {
                 if (!user) { return cb(null, false); }
-                if (user.password != password) { return cb(null, false); }
-                return cb(null, user);
+                user.comparePassword(password, () => { return done(null, false); })
             })
             .catch(err => {
                 return done(null, false, { message: err })
