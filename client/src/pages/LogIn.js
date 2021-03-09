@@ -1,11 +1,16 @@
 import React, { useState, useEffect } from "react";
 import UserAPI from "../utils/UserAPI"
 import useQuery from "../hooks/useQuery"
+
 export default function LogIn() {
+
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+
     const query = useQuery()
-    console.log('query', query)
+    const itFailed = query.get("fail")
+    const failedBool = (itFailed == "true")
+
     const handleSubmit = async event => {
         event.preventDefault();
         console.log("username is " + email);
@@ -21,9 +26,10 @@ export default function LogIn() {
             console.log(err)
         }
     };
+
     return (
         <div>
-            <h1>Log in dude</h1>
+            {failedBool ? <h2>that won't do dud</h2> : <h1>Log in dude</h1>}
             <form onSubmit={handleSubmit}>
                 <div>
                     <label htmlFor="exampleInputEmail1">Email address</label>

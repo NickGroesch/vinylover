@@ -18,9 +18,9 @@ export default {
             },
             body: JSON.stringify(data),
         }).then(response => {
-            if (response.status == 401) {
-                console.log("oh no 401")
-                window.location.assign(window.location.href + "?login=fail")//back to login
+            if ([400, 401].includes(response.status)) { //401 for password problems, 400 for wrong user
+                console.log("oh no 401 or something")
+                window.location.assign(window.location.href + "?fail=true")//back to login
             }
             else {
                 return response.json()
