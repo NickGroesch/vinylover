@@ -38,7 +38,7 @@ const isAuth = require("./passport/isAuth")
 //     }
 //     res.sendFile(path.join(__dirname, "./public/login.html"));
 // });
-app.post('/api/login',
+app.post('/api/user/login',
     passport.authenticate('local',
         // { failureRedirect: '/login' }
     ),
@@ -47,7 +47,7 @@ app.post('/api/login',
         res.json({ ok: true })
     });
 
-app.post("/api/signup", async (req, res) => {
+app.post("/api/user/signup", async (req, res) => {
     console.log("signing up the body", req.body)
     try {
         const newUser = await db.User.create({
@@ -60,13 +60,13 @@ app.post("/api/signup", async (req, res) => {
     }
 });
 
-app.get("/logout", function (req, res) {
+app.get("/api/user/logout", function (req, res) {
     console.log("logout", req.user)
     req.logout();
     res.redirect("/");
 });
 
-app.get("/api/user_data", function (req, res) {
+app.get("/api/user/user_data", function (req, res) {
     if (!req.user) {
         res.json({});
     } else {
@@ -76,6 +76,8 @@ app.get("/api/user_data", function (req, res) {
         });
     }
 });
+
+
 app.get("/members", isAuth, function (req, res) {
     res.sendFile(path.join(__dirname, "./public/members.html"));
 });
