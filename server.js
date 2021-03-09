@@ -4,9 +4,13 @@ const app = express();
 const port = 5000;
 
 app.use(require('morgan')('dev'));
-app.use(require('body-parser').urlencoded({ extended: true }));
+app.use(express.json(), express.urlencoded({ extended: true }));
 app.use(express.static("public"))
-app.use(require('express-session')({ secret: 'superDuperSecret', resave: false, saveUninitialized: false }));
+app.use(require('express-session')({
+    secret: 'superDuperSecret',
+    resave: false,
+    saveUninitialized: false
+}));
 
 
 const mongoose = require('mongoose');

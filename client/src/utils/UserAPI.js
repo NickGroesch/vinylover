@@ -1,6 +1,14 @@
 export default {
-    signUp: function () {
-        return fetch("/api/signup").then(response => response.json());
+    signUp: function (data) {
+        console.log(data)
+        return fetch("/api/signup", {
+            method: "POST",
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }).then(response => response.json());
     },
     //   // Gets the book with the given id
     //   getBook: function(id) {
