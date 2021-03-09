@@ -3,22 +3,14 @@ const db = require("../models/")
 const passport = require('passport');
 const LocalStratgey = require("passport-local").Strategy
 
-passport.serializeUser((user, done) => {
-    done(null, user.id);
-});
-
-passport.deserializeUser((id, done) => {
-    db.User.findById(id, (err, user) => {
-        done(err, user)
-    })
-})
 
 passport.use(
     new LocalStratgey({ usernameField: "email" }, (email, password, done) => {
+        console.log(email, password)
         db.User.findOne({ email: email })
             .then(user => {
                 if (!user) { return cb(null, false); }
-                user.comparePassword(password, () => { return done(null, false); })
+                user.comparePassword(password, () => { return done(null, user); })
             })
             .catch(err => {
                 return done(null, false, { message: err })
@@ -26,4 +18,11 @@ passport.use(
     })
 )
 
+passport.serializeUser(function (user, cb) {
+    cb(null, user);
+});
+
+passport.deserializeUser(function (obj, cb) {
+    cb(null, obj);
+});
 module.exports = passport

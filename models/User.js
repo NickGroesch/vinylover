@@ -20,33 +20,34 @@ const UserSchema = new mongoose.Schema({
     { strict: false } //why?
 )
 
-UserSchema.pre('save', function (next) {
-    const self = this
-    console.log(self)
-    console.log(this)
-    if (!self.isModified('password')) return next();
+UserSchema.pre('save', function (next) {//CANNOT BE AN =>
+    const self = this //useful later when I dive into the callbacks
+    if (!this.isModified('password')) return next();
     else {
         bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
+            console.log(err, salt)
             if (err) return next(err);
-
             // hash the password along with our new salt
-            bcrypt.hash(user.password, salt, function (err, hash) {
+            bcrypt.hash(self.password, salt, function (err, hash) {
                 if (err) return next(err);
-
                 // override the cleartext password with the hashed one
+                console.log("hash:", hash, self)
                 self.password = hash;
-                next();
                 next();
             })
 
         });
     }
 })
+
 UserSchema.methods.comparePassword = function (candidatePassword, cb) {
+    console.log('comp:', candidatePassword, this.password)
     bcrypt.compare(candidatePassword, this.password, function (err, isMatch) {
+        console.log('match:', isMatch)
         if (err) return cb(err);
         cb(null, isMatch);
     });
 }
+
 const User = mongoose.model("User", UserSchema)
 module.exports = User

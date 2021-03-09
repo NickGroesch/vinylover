@@ -2,21 +2,28 @@ const express = require("express");
 const path = require('path')
 const app = express();
 const port = 3000;
-app.use(require('morgan')('tiny'));
+
+app.use(require('morgan')('dev'));
 app.use(require('body-parser').urlencoded({ extended: true }));
-app.use(require('express-session')({ secret: 'superDuperSecret', resave: false, saveUninitialized: false }));
 app.use(express.static("public"))
-const passport = require("./passport/setup")
-app.use(passport.initialize());
-app.use(passport.session());
+app.use(require('express-session')({ secret: 'superDuperSecret', resave: false, saveUninitialized: false }));
+
 
 const mongoose = require('mongoose');
-const db = require("./models")
 mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/viny", {
     useNewUrlParser: true,
     useFindAndModify: false
 });
+const db = require("./models")
 
+const passport = require("./passport/setup")
+app.use(passport.initialize());
+app.use(passport.session());
+// app.use((req, res, next) => {
+//     console.log('user:',req.user)
+//     next()
+// })
+const isAuth = require("./passport/isAuth")
 // app.get("/", (req, res) => res.send("Happy noon to you!"));
 app.get("/", function (req, res) {
     // If the user already has an account send them to the members page
@@ -34,8 +41,9 @@ app.get("/login", function (req, res) {
 });
 app.post('/api/login',
     passport.authenticate('local', { failureRedirect: '/login' }),
-    function (req, res) {
-        res.redirect('/');
+    (req, res) => {
+        console.log(req)
+        res.json({ ok: true })
     });
 
 app.post("/api/signup", function (req, res) {
@@ -67,6 +75,9 @@ app.get("/api/user_data", function (req, res) {
             id: req.user.id
         });
     }
+});
+app.get("/members", isAuth, function (req, res) {
+    res.sendFile(path.join(__dirname, "./public/members.html"));
 });
 
 app.listen(port, () => console.log(
