@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import UserAPI from "../utils/UserAPI"
-import { useQuery } from "../hooks/useQueryParam"
+import useQuery from "../hooks/useQuery"
 export default function LogIn() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
