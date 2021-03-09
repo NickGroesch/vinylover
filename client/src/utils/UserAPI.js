@@ -17,6 +17,15 @@ export default {
                 'Content-Type': 'application/json'
             },
             body: JSON.stringify(data),
-        }).then(response => response.json());
+        }).then(response => {
+            if (response.status == 401) {
+                console.log("oh no 401")
+                window.location.assign(window.location.href + "?login=fail")//back to login
+            }
+            else {
+                return response.json()
+            }
+        }
+        );
     },
 };

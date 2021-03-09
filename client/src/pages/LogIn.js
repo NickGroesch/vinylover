@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from "react";
 import UserAPI from "../utils/UserAPI"
+import { useQuery } from "../hooks/useQueryParam"
 export default function LogIn() {
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const query = useQuery()
+    console.log('query', query)
     const handleSubmit = async event => {
         event.preventDefault();
         console.log("username is " + email);
@@ -15,7 +18,7 @@ export default function LogIn() {
             console.log(sponse)
 
         } catch (err) { //this is only network error, not server error
-            console.error(err)
+            console.log(err)
         }
     };
     return (
