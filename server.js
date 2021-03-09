@@ -1,7 +1,7 @@
 const express = require("express");
 const path = require('path')
 const app = express();
-const port = 3000;
+const port = 5000;
 
 app.use(require('morgan')('dev'));
 app.use(require('body-parser').urlencoded({ extended: true }));
@@ -41,18 +41,7 @@ app.post('/api/login',
     });
 
 app.post("/api/signup", async (req, res) => {
-    console.log("here it is", req.body)
-    // db.User.create({
-    //     email: req.body.email,
-    //     password: req.body.password
-    // })
-    //     .then(function () {
-    //         res.redirect(307, "/api/login");
-    //     })
-    //     .catch(function (err) {
-    //         console.log('uhoh', err)
-    //         res.status(401).json(err);
-    //     });
+    console.log("signing up the body", req.body)
     try {
         const newUser = await db.User.create({
             email: req.body.email,
@@ -60,7 +49,7 @@ app.post("/api/signup", async (req, res) => {
         })
         res.redirect(307, "/api/login");
     } catch (err) {
-        res.status(400).json({ oops: true })
+        res.status(500).json({ oops: true })
     }
 });
 
