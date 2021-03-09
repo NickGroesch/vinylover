@@ -3,7 +3,10 @@ const passport = require('passport');
 const LocalStratgey = require("passport-local").Strategy
 
 passport.use(
-    new LocalStratgey({ usernameField: "email" }, (email, password, done) => db.User.getAuthed(email, password, done))
+    new LocalStratgey(
+        { usernameField: "email" },
+        (email, password, done) => db.User.getAuthed(email, password, done)
+    )
 )
 
 passport.serializeUser(function (user, cb) {
