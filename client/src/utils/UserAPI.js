@@ -1,6 +1,5 @@
 export default {
     signUp: function (data) {
-        console.log(data)
         return fetch("/api/signup", {
             method: "POST",
             mode: 'cors',
@@ -10,16 +9,14 @@ export default {
             body: JSON.stringify(data),
         }).then(response => response.json());
     },
-    //   // Gets the book with the given id
-    //   getBook: function(id) {
-    //     return axios.get("/api/books/" + id);
-    //   },
-    //   // Deletes the book with the given id
-    //   deleteBook: function(id) {
-    //     return axios.delete("/api/books/" + id);
-    //   },
-    //   // Saves a book to the database
-    //   saveBook: function(bookData) {
-    //     return axios.post("/api/books", bookData);
-    //   }
+    logIn: function (data) {
+        return fetch("/api/login", {
+            method: "POST",
+            mode: 'cors',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data),
+        }).then(response => response.json());
+    },
 };

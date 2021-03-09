@@ -25,22 +25,25 @@ app.use(passport.initialize());
 app.use(passport.session());
 const isAuth = require("./passport/isAuth")
 
-app.get("/", function (req, res) {
-    // If the user already has an account send them to the members page
-    if (req.user) {
-        res.redirect("/members");
-    }
-    res.sendFile(path.join(__dirname, "./public/signup.html"));
-});
-app.get("/login", function (req, res) {
-    if (req.user) {
-        res.redirect("/members");
-    }
-    res.sendFile(path.join(__dirname, "./public/login.html"));
-});
+// app.get("/", function (req, res) {
+//     // If the user already has an account send them to the members page
+//     if (req.user) {
+//         res.redirect("/members");
+//     }
+//     res.sendFile(path.join(__dirname, "./public/signup.html"));
+// });
+// app.get("/login", function (req, res) {
+//     if (req.user) {
+//         res.redirect("/members");
+//     }
+//     res.sendFile(path.join(__dirname, "./public/login.html"));
+// });
 app.post('/api/login',
-    passport.authenticate('local', { failureRedirect: '/login' }),
-    (req, res) => {
+    passport.authenticate('local',
+        // { failureRedirect: '/login' }
+    ),
+    async (req, res) => {
+        console.log(req.user)
         res.json({ ok: true })
     });
 
@@ -58,6 +61,7 @@ app.post("/api/signup", async (req, res) => {
 });
 
 app.get("/logout", function (req, res) {
+    console.log("logout", req.user)
     req.logout();
     res.redirect("/");
 });
