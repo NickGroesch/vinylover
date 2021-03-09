@@ -8,14 +8,13 @@ const UserSchema = new mongoose.Schema({
         required: true,
         unique: true
     },
-    email_is_verified: {
+    email_is_verified: { //TODO nodemailer
         type: Boolean,
         default: false,
     },
     password: {
         type: String
     },
-
 },
     { strict: false } //why?
 )
@@ -25,17 +24,12 @@ UserSchema.pre('save', function (next) {//CANNOT BE AN =>
     if (!this.isModified('password')) return next();
     else {
         bcrypt.genSalt(SALT_WORK_FACTOR, function (err, salt) {
-            console.log(err, salt)
             if (err) return next(err);
-            // hash the password along with our new salt
             bcrypt.hash(self.password, salt, function (err, hash) {
                 if (err) return next(err);
-                // override the cleartext password with the hashed one
-                console.log("hash:", hash, self)
                 self.password = hash;
                 next();
             })
-
         });
     }
 })

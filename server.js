@@ -19,12 +19,8 @@ const db = require("./models")
 const passport = require("./passport/setup")
 app.use(passport.initialize());
 app.use(passport.session());
-// app.use((req, res, next) => {
-//     console.log('user:',req.user)
-//     next()
-// })
 const isAuth = require("./passport/isAuth")
-// app.get("/", (req, res) => res.send("Happy noon to you!"));
+
 app.get("/", function (req, res) {
     // If the user already has an account send them to the members page
     if (req.user) {
@@ -33,7 +29,6 @@ app.get("/", function (req, res) {
     res.sendFile(path.join(__dirname, "./public/signup.html"));
 });
 app.get("/login", function (req, res) {
-    // If the user already has an account send them to the members page
     if (req.user) {
         res.redirect("/members");
     }
@@ -42,23 +37,31 @@ app.get("/login", function (req, res) {
 app.post('/api/login',
     passport.authenticate('local', { failureRedirect: '/login' }),
     (req, res) => {
-        console.log(req)
         res.json({ ok: true })
     });
 
-app.post("/api/signup", function (req, res) {
+app.post("/api/signup", async (req, res) => {
     console.log("here it is", req.body)
-    db.User.create({
-        email: req.body.email,
-        password: req.body.password
-    })
-        .then(function () {
-            res.redirect(307, "/api/login");
+    // db.User.create({
+    //     email: req.body.email,
+    //     password: req.body.password
+    // })
+    //     .then(function () {
+    //         res.redirect(307, "/api/login");
+    //     })
+    //     .catch(function (err) {
+    //         console.log('uhoh', err)
+    //         res.status(401).json(err);
+    //     });
+    try {
+        const newUser = await db.User.create({
+            email: req.body.email,
+            password: req.body.password
         })
-        .catch(function (err) {
-            console.log('uhoh', err)
-            res.status(401).json(err);
-        });
+        res.redirect(307, "/api/login");
+    } catch (err) {
+        res.status(400).json({ oops: true })
+    }
 });
 
 app.get("/logout", function (req, res) {
